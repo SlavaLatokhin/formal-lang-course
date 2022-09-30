@@ -1,11 +1,8 @@
 import cfpq_data
-from networkx.algorithms import isomorphism
-from pyformlang.finite_automaton import Symbol, NondeterministicFiniteAutomaton, State
+from pyformlang.finite_automaton import Symbol
 from pyformlang.regular_expression import PythonRegex
-from networkx import is_isomorphic
 
-import project.t1_graph_module as gm
-import project.t2_deterministic_finite_automata as fsm
+import project.t2_finite_automata as fsm
 
 
 def test_build_minimal_dfa_from_regex():
