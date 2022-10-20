@@ -9,7 +9,6 @@ from pyformlang.regular_expression import Regex
 from scipy.sparse import lil_matrix, csr_matrix, csc_matrix
 from scipy import mean
 from scipy.stats import tstd
-
 from project.t2_finite_automata import (
     build_minimal_dfa_from_regex,
     build_nfa_from_graph,
