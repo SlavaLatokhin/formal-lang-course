@@ -1,5 +1,5 @@
-from project.t2_finite_automata import *
-from project.t3_boolean_matrix_automata import *
+from project.finite_automata import *
+from project.boolean_matrix_automata import *
 
 
 def rpq(graph, regex, start_states=None, final_states=None, type_of_matrix=dok_matrix):

@@ -1,6 +1,6 @@
 import os
 
-import project.t1_graph_module as gm
+import project.graph_module as gm
 
 
 def test_create_and_save_graph():

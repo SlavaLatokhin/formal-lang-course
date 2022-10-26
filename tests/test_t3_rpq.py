@@ -2,7 +2,7 @@ import cfpq_data
 from pyformlang.regular_expression import PythonRegex
 from scipy.sparse import lil_matrix
 
-from project.t3_rpq import *
+from project.rpq import *
 
 
 def test_rpq():

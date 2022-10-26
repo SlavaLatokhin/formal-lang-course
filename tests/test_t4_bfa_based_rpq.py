@@ -1,10 +1,10 @@
 import cfpq_data
 from pyformlang.regular_expression import Regex
-from project.t2_finite_automata import (
+from project.finite_automata import (
     build_minimal_dfa_from_regex,
     build_nfa_from_graph,
 )
-from project.t3_boolean_matrix_automata import *
+from project.boolean_matrix_automata import *
 
 
 def test_rpq_without_separated():
