@@ -13,5 +13,5 @@ def to_weakened_normal_form(cfg: CFG):
     return cfg
 
 
-def cfg_from_file(file, start_symbol=Variable("S")):
-    return CFG.from_text(open(file).read(), start_symbol)
+def cfg_from_file(filepath, start_symbol=Variable("S")):
+    return CFG.from_text(open(filepath).read(), start_symbol)
