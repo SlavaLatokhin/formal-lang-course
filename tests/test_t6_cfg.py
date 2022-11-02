@@ -20,7 +20,7 @@ def is_weakened__normal_form(cfq):
 
 def test_cfg():
     a = cfg_from_file("tests/data/cfq", Variable("S"))
-    # cfq in file: '''S -> a S b S | x S y S | $'''
+    # cfg in file: '''S -> a S b S | x S y S | $'''
     b = to_weakened_normal_form(a)
     right_words = ["", "ab", "xy", "abxyaxybxaby", "xaxaaxybaxybbyby"]
     wrong_words = ["a", "ba", "y", "yx", "axby"]
