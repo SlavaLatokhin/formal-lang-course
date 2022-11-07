@@ -1,7 +1,7 @@
 from pyformlang.finite_automaton import EpsilonNFA
 
-from project.t2_finite_automata import *
-from project.t3_boolean_matrix_automata import BooleanMatrixAutomata
+from project.finite_automata import *
+from project.boolean_matrix_automata import BooleanMatrixAutomata
 
 
 def test_intersect_two_automata():

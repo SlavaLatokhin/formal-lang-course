@@ -1,14 +1,6 @@
 import os
 
-import project.t1_graph_module as gm
-
-
-def setup_module(module):
-    print("\n\ntest for graph module\n\n")
-
-
-def teardown_module(module):
-    print("\n\nend of test\n\n")
+import project.graph_module as gm
 
 
 def test_create_and_save_graph():
