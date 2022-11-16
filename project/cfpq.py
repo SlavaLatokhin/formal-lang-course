@@ -1,4 +1,4 @@
-from collections import Set
+from typing import Set
 
 from pyformlang.cfg import CFG
 from networkx import MultiDiGraph
