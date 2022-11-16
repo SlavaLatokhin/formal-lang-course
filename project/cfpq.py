@@ -1,3 +1,5 @@
+from collections import Set
+
 from pyformlang.cfg import CFG
 from networkx import MultiDiGraph
 
@@ -33,8 +35,8 @@ def cfpq_cyk(s: str, cfg: CFG):
 def cfpg_by_hellings(
     graph: MultiDiGraph,
     cfg: CFG,
-    start_nodes: set[int] = None,
-    final_nodes: set[int] = None,
+    start_nodes: Set[int] = None,
+    final_nodes: Set[int] = None,
 ):
     if start_nodes is None:
         start_nodes = graph.nodes
