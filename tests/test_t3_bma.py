@@ -33,4 +33,7 @@ def test_intersect_two_automata():
             (0, "a", 4),
         ]
     )
-    assert actual_intersected_nfa.is_equivalent_to(expected_intersected_nfa)
+    assert actual_intersected_nfa.states == expected_intersected_nfa.states
+    assert actual_intersected_nfa.start_states == expected_intersected_nfa.start_states
+    assert actual_intersected_nfa.final_states == expected_intersected_nfa.final_states
+    assert actual_intersected_nfa.symbols == expected_intersected_nfa.symbols
