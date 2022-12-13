@@ -1,7 +1,7 @@
 import pytest
 from pyformlang.cfg import Variable, CFG
 
-from project.cyk import cyk
+from project.cfpq import cfpq_cyk
 
 
 @pytest.mark.parametrize(
@@ -23,5 +23,5 @@ from project.cyk import cyk
 )
 def test_is_string_deducible_from_grammar(cfg_text, right_strings, wrong_strings):
     cfg = CFG.from_text(cfg_text, Variable("S"))
-    assert all(cyk(s, cfg) for s in right_strings)
-    assert all(not cyk(s, cfg) for s in wrong_strings)
+    assert all(cfpq_cyk(s, cfg) for s in right_strings)
+    assert all(not cfpq_cyk(s, cfg) for s in wrong_strings)
