@@ -2,9 +2,13 @@ from typing import Set
 
 from pyformlang.cfg import CFG
 from networkx import MultiDiGraph
-from scipy.sparse import dok_matrix
+from scipy.sparse import dok_matrix, eye, csr_matrix
 
+from project.boolean_matrix_automata import BooleanMatrixAutomata
 from project.cfg import to_weakened_normal_form
+from project.ecfg import ECFG
+from project.finite_automata import build_nfa_from_graph
+from project.rsm import RecursiveStateMachine
 
 
 def cfpq_cyk(s: str, cfg: CFG):
@@ -47,13 +51,13 @@ def cfpg_by_hellings(
 
     result = {
         (x, y)
-        for (label, x, y) in hellings(graph, cfg)
+        for (label, x, y) in eval_hellings(graph, cfg)
         if x in start_nodes and y in final_nodes and label == start_symbol
     }
     return result
 
 
-def hellings(graph: MultiDiGraph, cfg: CFG):
+def eval_hellings(graph: MultiDiGraph, cfg: CFG):
     r = set(tuple())
     wcnf = to_weakened_normal_form(cfg)
     eps_nonterm = {p.head.value for p in wcnf.productions if not p.body}
@@ -151,5 +155,70 @@ def eval_matrix(graph: MultiDiGraph, cfg: CFG):
     return {
         (nonterm, i, j)
         for nonterm, matrix in matrices.items()
+        for i, j in zip(*matrix.nonzero())
+    }
+
+
+def cfpg_by_tensor_product(
+    graph: MultiDiGraph,
+    cfg: CFG,
+    start_nodes: Set[int] = None,
+    final_nodes: Set[int] = None,
+):
+    # return eval_tensor_product(graph, cfg)
+    if start_nodes is None:
+        start_nodes = graph.nodes
+    if final_nodes is None:
+        final_nodes = graph.nodes
+    start_symbol = cfg.start_symbol.value
+
+    result = {
+        (x, y)
+        for (label, x, y) in eval_tensor_product(graph, cfg)
+        if x in start_nodes and y in final_nodes and label == start_symbol
+    }
+    return result
+
+
+def eval_tensor_product(graph: MultiDiGraph, cfg: CFG):
+    bma_graph = BooleanMatrixAutomata(build_nfa_from_graph(graph))
+    bma_rsm = BooleanMatrixAutomata(
+        RecursiveStateMachine.from_ecfg(ECFG.from_cfg(cfg)).minimize().to_nfa()
+    )
+    loop_matrix = eye(bma_graph.number_of_states, dtype=bool, format="dok")
+    for nonterm in cfg.get_nullable_symbols():
+        if nonterm.value not in bma_graph.boolean_matrix:
+            bma_graph.boolean_matrix[nonterm.value] = loop_matrix
+        else:
+            bma_graph.boolean_matrix[nonterm.value] += loop_matrix
+    tc_nnz = 0
+    while True:
+        transitive_closure = bma_rsm.intersect(bma_graph).transitive_closure()
+        if transitive_closure.nnz == tc_nnz:
+            break
+        tc_nnz = transitive_closure.nnz
+        for (i, j) in list(zip(*transitive_closure.nonzero())):
+            graph_n_of_states = bma_graph.number_of_states
+            graph_i = i % graph_n_of_states
+            graph_j = j % graph_n_of_states
+            rsm_i = i // graph_n_of_states
+            rsm_j = j // graph_n_of_states
+            state_i = bma_rsm.indexes_states[rsm_i]
+            state_j = bma_rsm.indexes_states[rsm_j]
+            nonterm = state_i.value[0]
+            if (
+                state_i in bma_rsm.start_state_indexes
+                and state_j in bma_rsm.final_state_indexes
+            ):
+                if nonterm.value not in bma_graph.boolean_matrix.keys():
+                    bma_graph.boolean_matrix[nonterm] = dok_matrix(
+                        (bma_graph.number_of_states, bma_graph.number_of_states),
+                        dtype=bool,
+                    )
+                bma_graph.boolean_matrix[nonterm][graph_i, graph_j] = True
+
+    return {
+        (nonterm, bma_graph.indexes_states[i], bma_graph.indexes_states[j])
+        for nonterm, matrix in bma_graph.boolean_matrix.items()
         for i, j in zip(*matrix.nonzero())
     }

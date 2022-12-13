@@ -7,6 +7,7 @@ from scipy.sparse import dok_matrix, kron, block_diag, vstack
 class BooleanMatrixAutomata:
     number_of_states: int
     states_indexes: Dict[State, int]
+    indexes_states: Dict[int, State]
     start_state_indexes: Set[int]
     final_state_indexes: Set[int]
     type_of_matrix = dok_matrix
@@ -16,6 +17,7 @@ class BooleanMatrixAutomata:
         if nfa is None:
             self.number_of_states = 0
             self.states_indexes = dict()
+            self.indexes_states = dict()
             self.start_state_indexes = set()
             self.final_state_indexes = set()
             self.boolean_matrix = dict()
@@ -23,6 +25,9 @@ class BooleanMatrixAutomata:
             self.number_of_states = len(nfa.states)
             self.states_indexes = {
                 state: index for (index, state) in enumerate(nfa.states)
+            }
+            self.indexes_states = {
+                index: state for (index, state) in enumerate(nfa.states)
             }
             self.start_state_indexes = {i.value for i in nfa.start_states}
             self.final_state_indexes = {i.value for i in nfa.final_states}
