@@ -77,8 +77,8 @@ lambda =
 <val> -->
     "<string>"
   | '<char>'
-  | <boolean>
   | <int>
+  | <boolean>
   | <set>
   | <graph>
   | <vertices>
@@ -116,29 +116,29 @@ lambda =
 
 <lambda> --> fun (<var>) {<expr>}
 
-<intersection> --> <expr> && <expr> | intersect(<expr>, <expr>)
+<intersection> --> intersect(<expr>, <expr>)
 
-<concat> --> <expr> ~~ <expr> | concat(<expr>, <expr>)
+<concat> --> concat(<expr>, <expr>)
 
-<union> --> <expr> || <expr> | union(<expr>, <expr>)
+<union> --> union(<expr>, <expr>)
 
-<star> --> (<expr>)** | kleene(<expr>)
+<star> --> kleene(<expr>)
 ```
 
 ## Пример программы
 
 ```
-let graph = load_graph("atom"); // загрузка графа по названию
-let graph = load_graph_from("data/wine.dot"); // загрузка графа их файла
+let graph = load_graph("atom"); /* загрузка графа по названию */
+let graph = load_graph_from("data/wine.dot"); /* загрузка графа из файла */
 
-let graph = set_start(get_vertices(graph)[0], graph); // получение одной из вершин графа и назначение ее стартовой
-let graph = set_final(get_start(graph), graph); // получение стартовых вершин графа и назначение их финальными
+let graph = set_start(get_vertices(graph), graph); /* получение вершин графа и назначение их стартовыми */
+let graph = set_final(get_start(graph), graph); /* получение стартовых вершин графа и назначение их финальными */
 
-let x = ("label1" || "label2"); // создание запроса
+let x = union("label1", "label2"); /* создание запроса */
 
-let intersection = graph && x; // набор вершин, удовлетворяющих запросу
+let inter = intersect (graph, x); /* набор вершин, удовлетворяющих запросу */
 
-print(intersection); // печать переменной
+print(inter); /* печать переменной */
 
 ```
 

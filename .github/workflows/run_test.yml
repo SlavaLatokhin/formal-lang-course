@@ -37,6 +37,10 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
+      - uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+
       # Install requirements
       - name: Install requirements
 
@@ -45,6 +49,10 @@ jobs:
           python -m pip install --upgrade pip wheel setuptools
           python -m pip install -r requirements.txt
           python -m pip list
+
+      - name: Generate parser
+        working-directory: project/gql
+        run: antlr4 GQL.g4 -Dlanguage=Python3
 
       # Run all tests
       - name: Run all tests
