@@ -107,5 +107,4 @@ from project.gql.parser import save_parse_tree_as_dot
 def test_write_dot(tmpdir, text, result):
     file = tmpdir.mkdir("test_dir").join("cfg_file")
     save_parse_tree_as_dot(text, file)
-    print(file.read())
     assert file.read().strip() == result
