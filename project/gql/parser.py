@@ -1,7 +1,13 @@
 from typing import Callable, Any, Union, IO
 
-import antlr4
 import pydot
+from antlr4 import (
+    ParserRuleContext,
+    TerminalNode,
+    InputStream,
+    CommonTokenStream,
+    ParseTreeWalker,
+)
 
 from project.gql.ASLLexer import ASLLexer
 from project.gql.ASLParser import ASLParser
@@ -14,7 +20,7 @@ class DotTreeListener(ASLListener):
         self._curr_id = 0
         self._id_stack = []
 
-    def enterEveryRule(self, ctx: antlr4.ParserRuleContext):
+    def enterEveryRule(self, ctx: ParserRuleContext):
         self.dot.add_node(
             pydot.Node(self._curr_id, label=ASLParser.ruleNames[ctx.getRuleIndex()])
         )
@@ -23,19 +29,19 @@ class DotTreeListener(ASLListener):
         self._id_stack.append(self._curr_id)
         self._curr_id += 1
 
-    def exitEveryRule(self, ctx: antlr4.ParserRuleContext):
+    def exitEveryRule(self, ctx: ParserRuleContext):
         self._id_stack.pop()
 
-    def visitTerminal(self, node: antlr4.TerminalNode):
+    def visitTerminal(self, node: TerminalNode):
         self.dot.add_node(pydot.Node(self._curr_id, label=f"'{node}'"))
         self.dot.add_edge(pydot.Edge(self._id_stack[-1], self._curr_id))
         self._curr_id += 1
 
 
 def _get_parser(input_str: str) -> ASLParser:
-    chars = antlr4.InputStream(input_str)
+    chars = InputStream(input_str)
     lexer = ASLLexer(chars)
-    tokens = antlr4.CommonTokenStream(lexer)
+    tokens = CommonTokenStream(lexer)
     return ASLParser(tokens)
 
 
@@ -53,6 +59,6 @@ def save_parse_tree_as_dot(input_str: str, file: Union[str, IO]) -> None:
     if parser.getNumberOfSyntaxErrors() > 0:
         raise ValueError("Bad GQL syntax")
     listener = DotTreeListener()
-    walker = antlr4.ParseTreeWalker()
+    walker = ParseTreeWalker()
     walker.walk(listener, parser.prog())
     listener.dot.write(str(file))
