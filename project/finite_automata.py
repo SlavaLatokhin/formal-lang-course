@@ -1,9 +1,5 @@
 from typing import List
-from pyformlang.finite_automaton import (
-    State,
-    NondeterministicFiniteAutomaton,
-    DeterministicFiniteAutomaton,
-)
+from pyformlang.finite_automaton import State, DeterministicFiniteAutomaton, EpsilonNFA
 from pyformlang.regular_expression import Regex
 import networkx as nx
 import pyformlang.finite_automaton as pfl
@@ -25,7 +21,7 @@ def build_nfa_from_graph(
     graph: nx.MultiDiGraph,
     start_states: List[int] = None,
     final_states: List[int] = None,
-) -> NondeterministicFiniteAutomaton:
+) -> EpsilonNFA:
     """Build NFA from networkx MultiDiGraph
 
     :param start_states: list of string

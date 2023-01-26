@@ -31,7 +31,7 @@ val:  '"' string '"'
     ;
 
 string: (LETTER_E | '/' | '.' | '_' | ',' | ';' | ':' | DIGIT)* ;
-char: LETTER_E;
+char: LETTER_E | '/' | '.' | '_' | ',' | ';' | ':' | DIGIT;
 
 int: ('-'? DIGIT+) | '0';
 boolean: 'true' | 'false';
@@ -48,16 +48,21 @@ graph: var
 
 path: string;
 
-vertices:
-    'get_start' '(' graph ')'
-  | 'get_final' '(' graph ')'
-  | 'get_vertices' '(' graph ')'
-  | 'get_reachable' '(' graph ')'
-  ;
+vertices: var
+    | set
+    | 'get_start' '(' graph ')'
+    | 'get_final' '(' graph ')'
+    | 'get_vertices' '(' graph ')'
+    | 'get_reachable' '(' graph ')'
+    ;
 
-edges: 'get_edges' '(' graph ')';
+edges: var
+    | set
+    | 'get_edges' '(' graph ')';
 
-labels: 'get_labels' '(' graph ')';
+labels:  var
+    | set
+    | 'get_labels' '(' graph ')';
 
 map: 'map' '(' lambda ',' expr ')';
 filter: 'filter' '(' lambda ',' expr ')';

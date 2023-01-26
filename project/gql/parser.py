@@ -38,7 +38,7 @@ class DotTreeListener(ASLListener):
         self._curr_id += 1
 
 
-def _get_parser(input_str: str) -> ASLParser:
+def get_parser(input_str: str) -> ASLParser:
     chars = InputStream(input_str)
     lexer = ASLLexer(chars)
     tokens = CommonTokenStream(lexer)
@@ -48,14 +48,14 @@ def _get_parser(input_str: str) -> ASLParser:
 def check(
     input_str: str, parser_token: Callable[[ASLParser], Any] = lambda p: p.program()
 ) -> bool:
-    parser = _get_parser(input_str)
+    parser = get_parser(input_str)
     parser.removeErrorListeners()
     parser_token(parser)
     return parser.getNumberOfSyntaxErrors() == 0
 
 
 def save_parse_tree_as_dot(input_str: str, file: Union[str, IO]) -> None:
-    parser = _get_parser(input_str)
+    parser = get_parser(input_str)
     if parser.getNumberOfSyntaxErrors() > 0:
         raise ValueError("Bad GQL syntax")
     listener = DotTreeListener()
