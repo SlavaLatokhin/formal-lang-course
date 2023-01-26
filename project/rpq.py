@@ -25,3 +25,17 @@ def rpq(graph, regex, start_states=None, final_states=None, type_of_matrix=dok_m
                 )
             )
     return rpq_ans
+
+
+def rpq_interpreter(graph: EpsilonNFA):
+    bool_matrix = BooleanMatrixAutomata(graph, dok_matrix)
+    tc = bool_matrix.transitive_closure()
+    row, col = tc.nonzero()
+    rpq_ans = set()
+    for start, fin in zip(row, col):
+        if (
+            start in bool_matrix.start_state_indexes
+            and fin in bool_matrix.final_state_indexes
+        ):
+            rpq_ans.add(fin)
+    return rpq_ans
