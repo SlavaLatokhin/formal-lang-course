@@ -74,7 +74,7 @@ class GraphNFAInfo(NamedTuple):
     def graph_nfa_info(graph_nfa: NondeterministicFiniteAutomaton):
         return GraphNFAInfo(
             len(graph_nfa.states),
-            len(graph_nfa.transition_function),
+            len(graph_nfa._transition_function),
             set(str(a) for a in graph_nfa.symbols),
             len(graph_nfa.start_states),
             len(graph_nfa.final_states),
